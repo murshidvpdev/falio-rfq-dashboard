@@ -2,7 +2,7 @@ import React from 'react';
 import { ACCOUNTS } from '../../data/mockData';
 import { Calendar, Filter } from 'lucide-react';
 
-const FilterBar = ({ selectedAccount, onAccountChange }) => {
+const FilterBar = ({ selectedAccount, onAccountChange, selectedType, onTypeChange, startDate, endDate, onDateChange }) => {
     return (
         <div className="flex flex-wrap items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6">
 
@@ -22,14 +22,39 @@ const FilterBar = ({ selectedAccount, onAccountChange }) => {
 
             <div className="h-6 w-px bg-slate-200 mx-2 hidden md:block"></div>
 
-            {/* Date Range Placeholders */}
+            {/* Type Selector (Direct / Agreement) */}
             <div className="flex items-center gap-2">
-                <span className="text-slate-400"><Calendar size={18} /></span>
-                <div className="flex items-center gap-2 text-sm">
-                    <span className="text-slate-600">From:</span>
-                    <input type="date" className="bg-slate-50 border border-slate-200 rounded px-2 py-1 text-slate-700" />
-                    <span className="text-slate-600">To:</span>
-                    <input type="date" className="bg-slate-50 border border-slate-200 rounded px-2 py-1 text-slate-700" />
+                <label className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Type</label>
+                <select
+                    value={selectedType}
+                    onChange={(e) => onTypeChange(e.target.value)}
+                    className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-32 p-2.5 font-medium"
+                >
+                    <option value="Direct">Direct</option>
+                    <option value="Agreement">Agreement</option>
+                </select>
+            </div>
+
+            <div className="h-6 w-px bg-slate-200 mx-2 hidden md:block"></div>
+
+            {/* Date Range Selector */}
+            <div className="flex items-center gap-2">
+                <label className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Date Range</label>
+                <div className="flex items-center gap-2">
+                    <span className="text-slate-400"><Calendar size={18} /></span>
+                    <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => onDateChange('start', e.target.value)}
+                        className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 font-medium"
+                    />
+                    <span className="text-slate-400 font-medium">-</span>
+                    <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => onDateChange('end', e.target.value)}
+                        className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 font-medium"
+                    />
                 </div>
             </div>
 

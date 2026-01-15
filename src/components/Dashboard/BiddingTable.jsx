@@ -1,8 +1,11 @@
+
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Filter, MoreVertical, Eye } from 'lucide-react';
+import RFQDetailsModal from './RFQDetailsModal';
 
 const BiddingTable = ({ data }) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedRFQ, setSelectedRFQ] = useState(null);
 
     const filteredData = data.filter(item =>
         item.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -10,8 +13,8 @@ const BiddingTable = ({ data }) => {
     );
 
     return (
-        <div className="card flex flex-col">
-            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center">
                 <h3 className="text-lg font-bold text-slate-800">Bidding Stage Result Summary</h3>
                 <div className="relative">
                     <input
@@ -36,27 +39,44 @@ const BiddingTable = ({ data }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredData.slice(0, 10).map((row, index) => (
-                            <tr key={index} className="bg-white border-b border-slate-100 hover:bg-slate-50">
-                                <td className="px-6 py-4 font-medium text-slate-900">{row.id}</td>
-                                <td className="px-6 py-4 text-slate-500">{row.date}</td>
+                        {filteredData.slice(0, 10).map((item, index) => (
+                            <tr
+                                key={item.id}
+                                onClick={() => setSelectedRFQ(item)}
+                                className="hover:bg-blue-50/50 transition-colors border-b border-slate-50 last:border-0 cursor-pointer group"
+                            >
+                                <td className="px-6 py-4 font-medium text-slate-900">{item.id}</td>
+                                <td className="px-6 py-4 text-slate-500">{item.date}</td>
                                 <td className="px-6 py-4">
-                                    <span className={`px-2 py-1 rounded text-xs font-semibold ${row.status === 'Won' ? 'bg-green-100 text-green-700' :
-                                            row.status === 'Lost' ? 'bg-red-100 text-red-700' :
+                                    <span className={`px - 2 py - 1 rounded text - xs font - semibold ${item.status === 'Won' ? 'bg-green-100 text-green-700' :
+                                            item.status === 'Lost' ? 'bg-red-100 text-red-700' :
                                                 'bg-yellow-100 text-yellow-700'
-                                        }`}>
-                                        {row.status}
+                                        } `}>
+                                        {item.status}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-right font-medium text-slate-900">{row.amount}</td>
+                                <td className="px-6 py-4 text-right font-medium text-slate-900">{item.amount}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                <div className="mt-4 text-xs text-slate-400 text-center">Showing top 10 results</div>
             </div>
+
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-between items-center text-sm text-slate-500">
+                <span>Showing 10 of 50 entries</span>
+                <div className="flex gap-2">
+                    <button className="px-3 py-1 border border-slate-200 rounded hover:bg-white disabled:opacity-50">Previous</button>
+                    <button className="px-3 py-1 border border-slate-200 rounded hover:bg-white">Next</button>
+                </div>
+            </div>
+
+            <RFQDetailsModal
+                rfq={selectedRFQ}
+                onClose={() => setSelectedRFQ(null)}
+            />
         </div>
     );
 };
 
 export default BiddingTable;
+

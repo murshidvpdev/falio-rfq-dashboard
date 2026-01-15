@@ -11,12 +11,13 @@ const Sidebar = ({ isOpen }) => {
     ];
 
     return (
-        <div className={`fixed left-0 top-0 h-screen bg-white border-r border-slate-200 flex flex-col z-20 w-64 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-            <div className="p-6 border-b border-slate-100 flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0">
-                    IA
-                </div>
-                <span className="text-xl font-bold text-slate-800 whitespace-nowrap overflow-hidden">IndusAnalytics</span>
+        <div className={`fixed left-0 top-0 h-screen bg-white border-r border-slate-200 flex flex-col z-20 w-64 transition-transform duration-500 ease-in-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className="p-6 border-b border-slate-100 flex items-center gap-3">
+                <img
+                    src="/marvel_logo.png"
+                    alt="Marvel Logo"
+                    className="w-20 h-20 object-contain flex-shrink-0 brightness-0"
+                />
             </div>
 
             <nav className="flex-1 p-4 space-y-1 overflow-x-hidden">
@@ -24,8 +25,8 @@ const Sidebar = ({ isOpen }) => {
                     <button
                         key={index}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${item.active
-                                ? 'bg-blue-50 text-blue-600'
-                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            ? 'bg-blue-50 text-blue-600'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                             }`}
                     >
                         <item.icon size={20} className="flex-shrink-0" />

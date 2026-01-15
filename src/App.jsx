@@ -12,18 +12,29 @@ import QuoteValueChart from './components/Charts/QuoteValueChart';
 import HitRatioChart from './components/Charts/HitRatioChart';
 import WaterfallChart from './components/Charts/WaterfallChart';
 import BiddingTable from './components/Dashboard/BiddingTable';
+import SupplierKPIs from './components/Dashboard/SupplierKPIs';
+import SpendAnalysisChart from './components/Charts/SpendAnalysisChart';
+import AgreementTable from './components/Dashboard/AgreementTable';
 import { getDashboardData, ACCOUNTS } from './data/mockData';
 
 function App() {
   const [selectedAccount, setSelectedAccount] = useState(ACCOUNTS[0]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [selectedType, setSelectedType] = useState('Direct');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [data, setData] = useState(null);
 
   useEffect(() => {
     // Simulate API fetch
-    const dashboardData = getDashboardData(selectedAccount);
+    const dashboardData = getDashboardData(selectedAccount, selectedType, startDate, endDate);
     setData(dashboardData);
-  }, [selectedAccount]);
+  }, [selectedAccount, selectedType, startDate, endDate]);
+
+  const handleDateChange = (type, value) => {
+    if (type === 'start') setStartDate(value);
+    else setEndDate(value);
+  };
 
   const handleExport = () => {
     if (!data) return;
@@ -47,7 +58,7 @@ function App() {
     <div className="flex min-h-screen bg-slate-50/50">
       <Sidebar isOpen={isSidebarOpen} />
 
-      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
+      <div className={`flex-1 transition-[margin] duration-500 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         <Header
           title="Customer Dashboard"
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -58,6 +69,11 @@ function App() {
             <FilterBar
               selectedAccount={selectedAccount}
               onAccountChange={setSelectedAccount}
+              selectedType={selectedType}
+              onTypeChange={setSelectedType}
+              startDate={startDate}
+              endDate={endDate}
+              onDateChange={handleDateChange}
             />
             <button
               onClick={handleExport}
@@ -68,7 +84,7 @@ function App() {
             </button>
           </div>
 
-          <KPIGrid data={data.kpis} />
+          <KPIGrid data={data.kpis} selectedType={selectedType} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6 mb-6">
             <RFQFlowChart data={data.charts.rfqFlow} />
@@ -83,6 +99,20 @@ function App() {
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6 mb-8">
             <HitRatioChart data={data.charts.hitRatio} />
             <WaterfallChart data={data.charts.waterfall} />
+          </div>
+
+          {selectedType === 'Agreement' && (
+            <div className="mb-8">
+              <AgreementTable data={data.charts.agreementTable} />
+            </div>
+          )}
+
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-slate-800 mb-4">Manufacturing & Supplier Insights</h2>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              <SupplierKPIs data={data.supplierStats} />
+              <SpendAnalysisChart data={data.spendAnalysis} />
+            </div>
           </div>
 
           <BiddingTable data={data.charts.biddingTable} />
