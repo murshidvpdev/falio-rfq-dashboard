@@ -16,8 +16,9 @@ const Sidebar = ({ isOpen, user }) => {
 
     return (
         <div className={`fixed left-0 top-0 h-screen bg-white border-r border-slate-200 flex flex-col z-20 w-64 transition-transform duration-500 ease-in-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-            <div className="p-6 border-b border-slate-100 flex items-center gap-3">
-                {/* Logo removed as per request */}
+            <div className="p-6 border-b border-slate-100 flex items-center gap-3 justify-center">
+                <img src="/falio-logo-black.png" alt="Falio" className="h-8 w-auto" />
+                <span className="font-bold text-xl text-slate-800 tracking-tight">Falio</span>
             </div>
 
             <nav className="flex-1 p-4 space-y-1 overflow-x-hidden">

@@ -15,9 +15,9 @@ const Header = ({ title, onToggleSidebar, extraAction, showMenuButton = true }) 
                     </button>
                 )}
                 <img
-                    src="/marvel_logo.png"
-                    alt="Marvel Logo"
-                    className="w-20 h-20 object-contain brightness-0"
+                    src="/falio-logo-black.png"
+                    alt="Falio Logo"
+                    className="w-20 h-20 object-contain"
                 />
             </div>
 
