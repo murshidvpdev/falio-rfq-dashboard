@@ -1,3 +1,11 @@
 fastapi
 uvicorn
 websockets
+python-jose[cryptography]
+bcrypt
+python-multipart
+sqlalchemy
+asyncpg
+alembic
+greenlet
+pydantic-settings

@@ -1,8 +1,7 @@
 import React from 'react';
-import { ACCOUNTS } from '../../data/mockData';
 import { Calendar, Filter } from 'lucide-react';
 
-const FilterBar = ({ selectedAccount, onAccountChange, selectedType, onTypeChange, startDate, endDate, onDateChange }) => {
+const FilterBar = ({ accounts = [], selectedAccount, onAccountChange, selectedType, onTypeChange, startDate, endDate, onDateChange }) => {
     return (
         <div className="flex flex-wrap items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6">
 
@@ -14,7 +13,7 @@ const FilterBar = ({ selectedAccount, onAccountChange, selectedType, onTypeChang
                     onChange={(e) => onAccountChange(e.target.value)}
                     className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 font-medium"
                 >
-                    {ACCOUNTS.map(acc => (
+                    {accounts.map(acc => (
                         <option key={acc} value={acc}>{acc}</option>
                     ))}
                 </select>

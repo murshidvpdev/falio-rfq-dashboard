@@ -1,34 +1,17 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-import asyncio
-import json
 import random
 from datetime import datetime
 
-app = FastAPI()
+# --- Data Generation Logic ---
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+month_to_index = {
+    "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
+    "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
+}
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: list[WebSocket] = []
+ACCOUNTS = ["SEC", "Aramco", "Sabic", "Hadeed", "Maaden", "Marafic"]
 
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-
-manager = ConnectionManager()
-
-# --- Data Generation Logic (Ported from mockData.js) ---
+def get_accounts():
+    return ACCOUNTS
 
 def generate_monthly_data(base_received, base_quoted):
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -40,8 +23,7 @@ def generate_monthly_data(base_received, base_quoted):
 
     for month in months:
         rfq_received = int(rand_factor(base_received, 0.8, 1.2))
-        quoted = int(base_quoted * rfq_received * (1 + random.random() * 0.1)) # simplified from original logic
-        # Ensure quoted doesn't exceed received too much or logic check
+        quoted = int(base_quoted * rfq_received * (1 + random.random() * 0.1)) 
         quoted = min(quoted, rfq_received)
         
         data.append({
@@ -51,11 +33,6 @@ def generate_monthly_data(base_received, base_quoted):
             "lineItems": int(rfq_received * 5)
         })
     return data
-
-month_to_index = {
-    "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
-    "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
-}
 
 def get_dashboard_data(account, type_="Direct", start_date="", end_date=""):
     # Simulate different performance for different accounts
@@ -146,7 +123,6 @@ def get_dashboard_data(account, type_="Direct", start_date="", end_date=""):
         "agreementTable": [
             {"id": '1', "agreementNo": '', "noOfItems": 3, "validityStart": '', "validityEnd": '', "totalValue": '', "estVolume": '', "releasedValue": '', "noOfPO": '', "term": '', "version": '9493.2', "status": ''},
             {"id": '2', "agreementNo": '4600034238', "noOfItems": 301, "validityStart": '', "validityEnd": '', "totalValue": '', "estVolume": '10.26M', "releasedValue": '10.26M', "noOfPO": '', "term": '', "version": '', "status": ''},
-            # ... truncated for brevity, serving simplified list is fine for demo update
         ]
     }
 
@@ -192,52 +168,3 @@ def get_dashboard_data(account, type_="Direct", start_date="", end_date=""):
             ]
         }
     }
-
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
-    
-    # Default filters
-    current_filters = {
-        "account": "SEC",
-        "type": "Direct",
-        "startDate": "",
-        "endDate": ""
-    }
-
-    try:
-        while True:
-            try:
-                # Wait for message with timeout to allow periodic updates
-                data = await asyncio.wait_for(websocket.receive_text(), timeout=5.0)
-                payload = json.loads(data)
-                
-                if payload.get("action") == "update_filters":
-                    # Update filters with received data
-                    current_filters.update(payload.get("filters", {}))
-                    # Force immediate update
-                    dashboard_data = get_dashboard_data(
-                        current_filters["account"],
-                        current_filters["type"],
-                        current_filters["startDate"],
-                        current_filters["endDate"]
-                    )
-                    await websocket.send_text(json.dumps(dashboard_data))
-                    continue # Skip sleep/periodic update for this turn
-                    
-            except asyncio.TimeoutError:
-                pass # Continue to periodic update
-            except json.JSONDecodeError:
-                pass 
-                
-            # Periodic Update (simulate live data changes)
-            dashboard_data = get_dashboard_data(
-                current_filters["account"],
-                current_filters["type"],
-                current_filters["startDate"],
-                current_filters["endDate"]
-            )
-            await websocket.send_text(json.dumps(dashboard_data))
-            
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
