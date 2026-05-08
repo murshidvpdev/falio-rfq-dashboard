@@ -17,6 +17,7 @@ import SpendAnalysisChart from '../components/Charts/SpendAnalysisChart';
 import AgreementTable from '../components/Dashboard/AgreementTable';
 import UserMenu from '../components/Layout/UserMenu';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE, getWsUrl } from '../config';
 
 const Dashboard = () => {
     const [accounts, setAccounts] = useState([]);
@@ -24,6 +25,9 @@ const Dashboard = () => {
     const [selectedType, setSelectedType] = useState('Direct');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [supplierName, setSupplierName] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [user, setUser] = useState(null);
     const [data, setData] = useState(null);
@@ -34,7 +38,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchAccounts = async () => {
             try {
-                const response = await fetch('http://localhost:8000/accounts');
+                const response = await fetch(`${API_BASE}/accounts`);
                 if (response.ok) {
                     const data = await response.json();
                     setAccounts(data);
@@ -53,7 +57,7 @@ const Dashboard = () => {
             const token = localStorage.getItem('token');
             if (!token) return;
             try {
-                const response = await fetch('http://localhost:8000/users/me', {
+                const response = await fetch(`${API_BASE}/users/me`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (response.ok) {
@@ -75,7 +79,7 @@ const Dashboard = () => {
         }
         // WebSocket Connection
         // Pass token in query param
-        const url = `ws://127.0.0.1:8000/ws?token=${token}`;
+        const url = getWsUrl(`/ws?token=${token}`);
         const socket = new WebSocket(url);
         setWs(socket);
 
@@ -87,7 +91,10 @@ const Dashboard = () => {
                     account: selectedAccount,
                     type: selectedType,
                     startDate: startDate,
-                    endDate: endDate
+                    endDate: endDate,
+                    supplierName: supplierName,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice
                 }
             }));
         };
@@ -126,11 +133,14 @@ const Dashboard = () => {
                     account: selectedAccount,
                     type: selectedType,
                     startDate: startDate,
-                    endDate: endDate
+                    endDate: endDate,
+                    supplierName: supplierName,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice
                 }
             }));
         }
-    }, [selectedAccount, selectedType, startDate, endDate, ws]);
+    }, [selectedAccount, selectedType, startDate, endDate, supplierName, minPrice, maxPrice, ws]);
 
     const handleDateChange = (type, value) => {
         if (type === 'start') setStartDate(value);
@@ -186,6 +196,12 @@ const Dashboard = () => {
                             startDate={startDate}
                             endDate={endDate}
                             onDateChange={handleDateChange}
+                            supplierName={supplierName}
+                            onSupplierNameChange={setSupplierName}
+                            minPrice={minPrice}
+                            onMinPriceChange={setMinPrice}
+                            maxPrice={maxPrice}
+                            onMaxPriceChange={setMaxPrice}
                         />
                         <button
                             onClick={handleExport}

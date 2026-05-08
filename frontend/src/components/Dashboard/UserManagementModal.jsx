@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, UserPlus, Key } from 'lucide-react';
+import { API_BASE } from '../../config';
 
 const UserManagementModal = ({ isOpen, onClose, initialTab = 'create' }) => {
     const [activeTab, setActiveTab] = useState(initialTab); // 'create' or 'password'
@@ -22,7 +23,7 @@ const UserManagementModal = ({ isOpen, onClose, initialTab = 'create' }) => {
         e.preventDefault();
         setMessage({ type: '', text: '' });
         try {
-            const response = await fetch('http://localhost:8000/users', {
+            const response = await fetch(`${API_BASE}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ const UserManagementModal = ({ isOpen, onClose, initialTab = 'create' }) => {
 
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch('http://localhost:8000/users/me/password', {
+            const response = await fetch(`${API_BASE}/users/me/password`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

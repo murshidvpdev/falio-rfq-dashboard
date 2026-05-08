@@ -57,7 +57,7 @@ month_to_index = {
     "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
 }
 
-def get_dashboard_data(account, type_="Direct", start_date="", end_date=""):
+def get_dashboard_data(account, type_="Direct", start_date="", end_date="", supplier_name="", min_price="", max_price=""):
     # Simulate different performance for different accounts
     performance_factor = 1.0
     if account == "Aramco": performance_factor = 1.2
@@ -93,6 +93,49 @@ def get_dashboard_data(account, type_="Direct", start_date="", end_date=""):
             pass # Invalid date format, ignore filter
 
     # Charts Data Generation
+    
+    # Helper for Bidding Table
+    suppliers = ['Siemens', 'ABB', 'Schneider', 'GE', 'Honeywell', 'Mitsubishi']
+    
+    # Generate Bidding Table Data
+    bidding_table_data = []
+    for i in range(50):
+        amount_val = random.random() * 100000 * performance_factor
+        item = {
+            "id": f"RFQ-{20230000 + i}",
+            "date": f"2023-{random.randint(1, 12)}-{random.randint(1, 28)}",
+            "status": "Won" if random.random() > 0.5 else "Lost" if random.random() > 0.5 else "Pending",
+            "amount": f"{amount_val:.2f}",
+            "account": account,
+            "supplier": random.choice(suppliers) # Add supplier field
+        }
+        
+        # Apply Filters to Bidding Table Item
+        include_item = True
+        
+        # Supplier Filter
+        if supplier_name and supplier_name.lower() not in item["supplier"].lower():
+            include_item = False
+            
+        # Price Filter
+        if min_price:
+            try:
+                if float(amount_val) < float(min_price):
+                    include_item = False
+            except ValueError:
+                pass
+        
+        if max_price:
+            try:
+                if float(amount_val) > float(max_price):
+                    include_item = False
+            except ValueError:
+                pass
+
+        if include_item:
+            bidding_table_data.append(item)
+
+
     charts = {
         "rfqFlow": filtered_data,
         "bidQuoteRatio": [
@@ -134,15 +177,7 @@ def get_dashboard_data(account, type_="Direct", start_date="", end_date=""):
             {"name": 'Expired', "value": int(-500 * performance_factor), "type": 'delta'},
             {"name": 'Won', "value": int(22000 * performance_factor), "type": 'total'},
         ],
-        "biddingTable": [
-            {
-                "id": f"RFQ-{20230000 + i}",
-                "date": f"2023-{random.randint(1, 12)}-{random.randint(1, 28)}",
-                "status": "Won" if random.random() > 0.5 else "Lost" if random.random() > 0.5 else "Pending",
-                "amount": f"{random.random() * 100000 * performance_factor:.2f}",
-                "account": account
-            } for i in range(50)
-        ],
+        "biddingTable": bidding_table_data,
         "agreementTable": [
             {"id": '1', "agreementNo": '', "noOfItems": 3, "validityStart": '', "validityEnd": '', "totalValue": '', "estVolume": '', "releasedValue": '', "noOfPO": '', "term": '', "version": '9493.2', "status": ''},
             {"id": '2', "agreementNo": '4600034238', "noOfItems": 301, "validityStart": '', "validityEnd": '', "totalValue": '', "estVolume": '10.26M', "releasedValue": '10.26M', "noOfPO": '', "term": '', "version": '', "status": ''},
@@ -202,7 +237,10 @@ async def websocket_endpoint(websocket: WebSocket):
         "account": "SEC",
         "type": "Direct",
         "startDate": "",
-        "endDate": ""
+        "endDate": "",
+        "supplierName": "",
+        "minPrice": "",
+        "maxPrice": ""
     }
 
     try:
@@ -220,7 +258,10 @@ async def websocket_endpoint(websocket: WebSocket):
                         current_filters["account"],
                         current_filters["type"],
                         current_filters["startDate"],
-                        current_filters["endDate"]
+                        current_filters["endDate"],
+                        current_filters.get("supplierName", ""),
+                        current_filters.get("minPrice", ""),
+                        current_filters.get("maxPrice", "")
                     )
                     await websocket.send_text(json.dumps(dashboard_data))
                     continue # Skip sleep/periodic update for this turn
@@ -235,7 +276,10 @@ async def websocket_endpoint(websocket: WebSocket):
                 current_filters["account"],
                 current_filters["type"],
                 current_filters["startDate"],
-                current_filters["endDate"]
+                current_filters["endDate"],
+                current_filters.get("supplierName", ""),
+                current_filters.get("minPrice", ""),
+                current_filters.get("maxPrice", "")
             )
             await websocket.send_text(json.dumps(dashboard_data))
             

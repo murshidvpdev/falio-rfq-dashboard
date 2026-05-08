@@ -3,9 +3,10 @@ import Header from '../components/Layout/Header';
 import Sidebar from '../components/Layout/Sidebar';
 import UserMenu from '../components/Layout/UserMenu';
 import Toast from '../components/UI/Toast';
-import { Search, Download, Trash2, Edit, CheckCircle, RefreshCw, Filter, MoreHorizontal } from 'lucide-react';
+import { Search, Download, Trash2, Edit, CheckCircle, RefreshCw, Filter, MoreHorizontal, LayoutDashboard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { API_BASE } from '../config';
 
 const FileProcessed = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -28,7 +29,7 @@ const FileProcessed = () => {
 
     const fetchFiles = async () => {
         try {
-            const response = await fetch('http://localhost:8000/automation/files');
+            const response = await fetch(`${API_BASE}/automation/files`);
             if (response.ok) {
                 const data = await response.json();
 
@@ -62,13 +63,13 @@ const FileProcessed = () => {
 
             try {
                 // Fetch User
-                const userRes = await fetch('http://localhost:8000/users/me', {
+                const userRes = await fetch(`${API_BASE}/users/me`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (userRes.ok) setUser(await userRes.json());
 
                 // Fetch Automation Status
-                const statusRes = await fetch('http://localhost:8000/automation/status');
+                const statusRes = await fetch(`${API_BASE}/automation/status`);
                 if (statusRes.ok) {
                     const statusData = await statusRes.json();
                     setIsAutomationRunning(statusData.running);
@@ -92,7 +93,7 @@ const FileProcessed = () => {
         setIsAutomationRunning(newState);
         try {
             const endpoint = newState ? 'start' : 'stop';
-            await fetch(`http://localhost:8000/automation/${endpoint}`, { method: 'POST' });
+            await fetch(`${API_BASE}/automation/${endpoint}`, { method: 'POST' });
             setNotification({
                 message: `Automation ${newState ? 'Started' : 'Stopped'}`,
                 type: newState ? 'success' : 'info'

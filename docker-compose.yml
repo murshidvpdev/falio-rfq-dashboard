@@ -1,0 +1,93 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# RFQ Dashboard — Docker Compose
+#
+# Services:
+#   db        PostgreSQL 16
+#   backend   FastAPI + Uvicorn (runs migrations on startup)
+#   frontend  nginx serving React SPA + reverse-proxying to backend
+#
+# Usage:
+#   cp .env.example .env          # fill in secrets
+#   docker compose up --build
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rfq}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-rfq_dashboard}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - rfq-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rfq} -d ${POSTGRES_DB:-rfq_dashboard}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ── FastAPI Backend ─────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-rfq}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-rfq_dashboard}
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
+      ALGORITHM: ${ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+    volumes:
+      # Persist automation files on the host so they survive container restarts
+      - ./backend/files:/app/files
+    networks:
+      - rfq-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ── nginx + React Frontend ──────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # With nginx proxying, the browser reaches the API via the same origin.
+        # Set to "" for relative URLs (recommended) or a full URL for external backends.
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+        VITE_WS_BASE_URL: ${VITE_WS_BASE_URL:-}
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    networks:
+      - rfq-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+# ─────────────────────────────────────────────────────────────────────────────
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  rfq-net:
+    driver: bridge

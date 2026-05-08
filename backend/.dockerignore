@@ -1,0 +1,11 @@
+__pycache__/
+**/__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+test_*.py
+create_user_*.py
+files/source/*
+files/processed/*
+files/exception/*

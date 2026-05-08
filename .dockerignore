@@ -1,0 +1,27 @@
+# Backend build artifacts
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/.venv/
+backend/venv/
+
+# Frontend (excluded from backend build context)
+frontend/
+
+# Git / IDE
+.git/
+.gitignore
+.DS_Store
+*.swp
+*.swo
+
+# Secrets / local config
+.env
+.env.local
+
+# Dev/test files
+backend/test_*.py
+backend/create_user_*.py
+
+# Docs
+*.md

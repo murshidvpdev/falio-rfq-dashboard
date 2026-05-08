@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User, UserPlus, Key, ArrowLeft, Loader2, ChevronRight, Mail } from 'lucide-react';
+import { API_BASE } from '../config';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Login = () => {
@@ -43,7 +44,7 @@ const Login = () => {
         formData.append('password', password);
 
         try {
-            const response = await fetch('http://localhost:8000/token', {
+            const response = await fetch(`${API_BASE}/token`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData,
@@ -67,14 +68,14 @@ const Login = () => {
         setIsLoading(true);
 
         try {
-            const checkResponse = await fetch(`http://localhost:8000/users/exists?username=${username}`);
+            const checkResponse = await fetch(`${API_BASE}/users/exists?username=${username}`);
             const checkData = await checkResponse.json();
 
             if (checkData.exists) {
                 throw new Error('Username already taken');
             }
 
-            const response = await fetch('http://localhost:8000/users', {
+            const response = await fetch(`${API_BASE}/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
@@ -104,7 +105,7 @@ const Login = () => {
         setIsLoading(true);
 
         try {
-            const checkResponse = await fetch(`http://localhost:8000/users/exists?username=${username}`);
+            const checkResponse = await fetch(`${API_BASE}/users/exists?username=${username}`);
             const checkData = await checkResponse.json();
 
             if (!checkData.exists) {
@@ -115,7 +116,7 @@ const Login = () => {
             formData.append('username', username);
             formData.append('password', oldPassword);
 
-            const loginResponse = await fetch('http://localhost:8000/token', {
+            const loginResponse = await fetch(`${API_BASE}/token`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData,
@@ -126,7 +127,7 @@ const Login = () => {
             const loginData = await loginResponse.json();
             const token = loginData.access_token;
 
-            const updateResponse = await fetch('http://localhost:8000/users/me/password', {
+            const updateResponse = await fetch(`${API_BASE}/users/me/password`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -456,7 +457,7 @@ const Login = () => {
                 </div>
 
                 <div className="text-center mt-8 text-slate-500 text-xs">
-                    &copy; 2026 Antigravity. All rights reserved.
+                    &copy; 2026 Falio. All rights reserved.
                 </div>
             </motion.div>
         </div>
