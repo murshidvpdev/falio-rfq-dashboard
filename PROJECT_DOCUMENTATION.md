@@ -40,7 +40,7 @@ The RFQ Dashboard is a full-stack business intelligence web application that all
 
 ### Business Purpose
 
-The system is an internal dashboard for an industrial procurement company (Antigravity / Falio brand) to track quoting pipeline health across major Saudi accounts. Dashboard data is currently simulated — the next development phase would wire it to a real ERP/CRM data source.
+The system is an internal dashboard for an industrial procurement company (Falio) to track quoting pipeline health across major Saudi accounts. Dashboard data is currently simulated — the next development phase would wire it to a real ERP/CRM data source.
 
 ### High-Level Architecture
 

@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "antigravity": "^0.0.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.26.2",
     "lucide-react": "^0.562.0",
