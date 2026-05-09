@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import FileProcessed from './pages/FileProcessed';
+import DocumentViewer from './pages/DocumentViewer';
 import Unauthorized from './pages/Unauthorized';
 import UsersPage from './pages/Admin/UsersPage';
 import RolesPage from './pages/Admin/RolesPage';
@@ -26,6 +27,13 @@ function App() {
                 <Route path="/dashboard" element={
                     <ProtectedRoute>
                         <Dashboard />
+                    </ProtectedRoute>
+                } />
+
+                {/* Document viewer — uses /viewer/ prefix to avoid nginx /documents proxy */}
+                <Route path="/viewer/:id" element={
+                    <ProtectedRoute permission="files.view">
+                        <DocumentViewer />
                     </ProtectedRoute>
                 } />
 

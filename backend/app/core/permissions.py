@@ -47,6 +47,11 @@ class P:
     # Settings
     SETTINGS_MANAGE = "settings.manage"
 
+    # Files / Documents
+    FILES_UPLOAD = "files.upload"
+    FILES_VIEW   = "files.view"
+    FILES_DELETE = "files.delete"
+
 
 # ── Full permission catalogue ──────────────────────────────────────────────────
 
@@ -81,6 +86,10 @@ ALL_PERMISSIONS = [
     {"name": "Export Reports",    "slug": P.REPORTS_EXPORT,     "module": "reports",     "action": "export",       "description": "Download reports"},
     # Settings
     {"name": "Manage Settings",   "slug": P.SETTINGS_MANAGE,   "module": "settings",    "action": "manage",       "description": "Configure system settings"},
+    # Files
+    {"name": "Upload Files",      "slug": P.FILES_UPLOAD,      "module": "files",       "action": "upload",       "description": "Upload documents for data extraction"},
+    {"name": "View Files",        "slug": P.FILES_VIEW,        "module": "files",       "action": "view",         "description": "View and search uploaded documents"},
+    {"name": "Delete Files",      "slug": P.FILES_DELETE,      "module": "files",       "action": "delete",       "description": "Delete uploaded documents"},
 ]
 
 
@@ -104,6 +113,7 @@ DEFAULT_ROLE_PERMISSIONS: dict[str, _Union[str, list[str]]] = {
         P.DASHBOARD_VIEW, P.DASHBOARD_ANALYTICS,
         P.DATA_VIEW, P.DATA_CREATE, P.DATA_EDIT, P.DATA_EXPORT,
         P.REPORTS_VIEW, P.REPORTS_EXPORT,
+        P.FILES_UPLOAD, P.FILES_VIEW, P.FILES_DELETE,
     ],
     "manager": [
         P.USERS_VIEW,
@@ -111,11 +121,13 @@ DEFAULT_ROLE_PERMISSIONS: dict[str, _Union[str, list[str]]] = {
         P.DATA_VIEW, P.DATA_CREATE, P.DATA_EDIT,
         P.DATA_APPROVE, P.DATA_REJECT, P.DATA_EXPORT,
         P.REPORTS_VIEW, P.REPORTS_EXPORT,
+        P.FILES_UPLOAD, P.FILES_VIEW, P.FILES_DELETE,
     ],
     "checker": [
         P.DASHBOARD_VIEW,
         P.DATA_VIEW, P.DATA_APPROVE, P.DATA_REJECT,
         P.REPORTS_VIEW,
+        P.FILES_UPLOAD, P.FILES_VIEW,
     ],
     "data_entry": [
         P.DASHBOARD_VIEW,
