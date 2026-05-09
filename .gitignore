@@ -25,9 +25,21 @@ dist-ssr
 
 # Python
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyd
 venv/
+.venv/
 .env
+.env.*
+!.env.example
 .pytest_cache/
 backend/files
+
+# Docker
+.docker/
+
+# OS
+**/.DS_Store
