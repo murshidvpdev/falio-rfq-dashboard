@@ -1,27 +1,35 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from .api.endpoints import auth, dashboard, automation
+from .api.endpoints import users as users_mgmt
+from .api.endpoints import roles as roles_mgmt
+from .api.endpoints import permissions_api
 
 from .core.database import engine
 from .core.models import Base
-from .models import user, file # Import models to register them with Base
+from .models import user, file, role, permission, associations, audit_log  # register with Base
 
-app = FastAPI(title="RFQ Dashboard Backend")
+app = FastAPI(title="Falio RFQ Dashboard API", version="2.0.0")
 
-# CORS
+# ── CORS ───────────────────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],   # Restrict to actual frontend origin in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include Routers
-app.include_router(auth.router, tags=["Authentication"])
-app.include_router(dashboard.router, tags=["Dashboard"])
-app.include_router(automation.router, prefix="/automation", tags=["Automation"])
+# ── Routers ────────────────────────────────────────────────────────────────────
+app.include_router(auth.router,             tags=["Authentication"])
+app.include_router(dashboard.router,        tags=["Dashboard"])
+app.include_router(automation.router,       prefix="/automation",      tags=["Automation"])
+app.include_router(users_mgmt.router,                                  tags=["User Management"])
+app.include_router(roles_mgmt.router,                                  tags=["Role Management"])
+app.include_router(permissions_api.router,                             tags=["Permissions"])
+
 
 @app.get("/")
 def read_root():
-    return {"message": "RFQ Dashboard Backend is running"}
+    return {"message": "Falio RFQ Dashboard API is running", "version": "2.0.0"}
