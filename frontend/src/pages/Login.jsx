@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Lock, User, UserPlus, Key, ArrowLeft, Loader2, ChevronRight, Mail } from 'lucide-react';
 import { API_BASE } from '../config';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePermissions } from '../hooks/usePermissions';
 
 const Login = () => {
     const [view, setView] = useState('login'); // 'login' | 'register' | 'change-password'
@@ -19,6 +20,7 @@ const Login = () => {
     const [successMsg, setSuccessMsg] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { loadPermissions } = usePermissions();
 
     const clearForm = () => {
         setError('');
@@ -54,6 +56,7 @@ const Login = () => {
 
             const data = await response.json();
             localStorage.setItem('token', data.access_token);
+            await loadPermissions();   // Populate permissions before navigating
             navigate('/', { replace: true });
         } catch (err) {
             setError(err.message);
