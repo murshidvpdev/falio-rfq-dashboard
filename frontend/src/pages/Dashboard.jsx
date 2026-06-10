@@ -163,7 +163,7 @@ const Dashboard = () => {
     };
 
     if (!data) return (
-        <div className="flex flex-col h-screen items-center justify-center space-y-4">
+        <div className="flex flex-col h-screen items-center justify-center space-y-4 bg-gradient-to-br from-blue-50 to-indigo-50">
             <div className="text-xl text-slate-700">Loading dashboard...</div>
             <button
                 onClick={handleLogout}
@@ -175,7 +175,7 @@ const Dashboard = () => {
     );
 
     return (
-        <div className="flex min-h-screen bg-slate-50/50">
+        <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
             <Sidebar isOpen={isSidebarOpen} user={user} />
 
             <div className={`flex-1 transition-[margin] duration-500 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
