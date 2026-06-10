@@ -3,7 +3,7 @@ import { Menu, Bell } from 'lucide-react';
 
 const Header = ({ title, onToggleSidebar, extraAction, showMenuButton = true }) => {
     return (
-        <header className="bg-blue-950 border-b border-blue-900 py-4 px-8 sticky top-0 z-10 transition-all duration-300 grid grid-cols-3 items-center">
+        <header className="h-[88px] bg-blue-950 border-b border-blue-900 px-8 sticky top-0 z-10 transition-all duration-300 grid grid-cols-3 items-center">
             {/* Left Section: Toggle & Logo */}
             <div className="flex items-center gap-4 justify-start">
                 {showMenuButton && (

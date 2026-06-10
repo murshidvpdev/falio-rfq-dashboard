@@ -50,7 +50,7 @@ const Sidebar = ({ isOpen, user }) => {
         <div className={`fixed left-0 top-0 h-screen bg-blue-950 border-r border-blue-900 flex flex-col z-20 w-64 transition-transform duration-500 ease-in-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
 
             {/* Logo */}
-            <div className="p-6 border-b border-blue-900 flex items-center gap-3 justify-center">
+            <div className="h-[88px] border-b border-blue-900 flex items-center gap-3 justify-center">
                 <img src="/falio-logo-black.png" alt="Falio" className="h-8 w-auto brightness-0 invert" />
                 <span className="font-bold text-xl text-white tracking-tight">Falio</span>
             </div>
