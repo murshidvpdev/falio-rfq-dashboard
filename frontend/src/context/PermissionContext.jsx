@@ -1,7 +1,6 @@
-import React, { createContext, useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { API_BASE } from '../config';
-
-export const PermissionContext = createContext(null);
+import { PermissionContext } from './permission-context';
 
 export const PermissionProvider = ({ children }) => {
     const [permissions, setPermissions] = useState(new Set());

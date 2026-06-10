@@ -7,6 +7,7 @@ from .api.endpoints import roles as roles_mgmt
 from .api.endpoints import permissions_api
 from .api.endpoints import documents as documents_api
 
+from .core.config import settings
 from .core.database import engine
 from .core.models import Base
 from .models import user, file, role, permission, associations, audit_log, document  # register with Base
@@ -16,7 +17,7 @@ app = FastAPI(title="Falio RFQ Dashboard API", version="2.0.0")
 # ── CORS ───────────────────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # Restrict to actual frontend origin in production
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

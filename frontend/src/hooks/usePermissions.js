@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { PermissionContext } from '../context/PermissionContext';
+import { PermissionContext } from '../context/permission-context';
 
 /**
  * Hook for permission checks throughout the app.

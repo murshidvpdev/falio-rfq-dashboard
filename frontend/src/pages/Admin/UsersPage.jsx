@@ -248,7 +248,7 @@ const UsersPage = () => {
     const [assignModal, setAssignModal] = useState(null);
     const [resetModal, setResetModal] = useState(null);
     const [createModal, setCreateModal] = useState(false);
-    const { hasPermission, isSuperAdmin } = usePermissions();
+    const { isSuperAdmin } = usePermissions();
     const perPage = 15;
 
     const notify = (message, type = 'success') => setNotification({ message, type });

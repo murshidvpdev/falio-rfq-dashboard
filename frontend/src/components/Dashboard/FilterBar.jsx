@@ -16,7 +16,6 @@ const FilterBar = ({
     onMinPriceChange,
     maxPrice,
     onMaxPriceChange,
-    onApplyMoreFilters // Function to trigger apply if needed, or we can just rely on props change
 }) => {
     const [isMoreFiltersOpen, setIsMoreFiltersOpen] = useState(false);
     const filterRef = useRef(null);

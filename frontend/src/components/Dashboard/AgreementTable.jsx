@@ -76,7 +76,7 @@ const AgreementTable = ({ data }) => {
             {/* Footer */}
             <div className="px-6 py-3.5 border-t border-slate-100 bg-slate-50/50 flex justify-end">
                 <div className="flex gap-1.5">
-                    {['«', '1', '2', '3', '4', '»'].map((label, i) => (
+                    {['«', '1', '2', '3', '4', '»'].map((label) => (
                         <button
                             key={label}
                             className={`w-8 h-8 rounded-lg text-xs font-medium transition-all border ${

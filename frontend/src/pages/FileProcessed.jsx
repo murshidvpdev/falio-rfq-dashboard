@@ -327,7 +327,6 @@ const FileProcessed = () => {
     const [files, setFiles] = useState([]);
     const [filesPage, setFilesPage] = useState(1);
     const [filesSearch, setFilesSearch] = useState('');
-    const [selectedItems, setSelectedItems] = useState([]);
     const [isAutomationRunning, setIsAutomationRunning] = useState(false);
     const latestIdRef = useRef(null);
     const filesPerPage = 10;
@@ -405,8 +404,6 @@ const FileProcessed = () => {
     const totalFilePages = Math.max(1, Math.ceil(filteredFiles.length / filesPerPage));
     const visibleFiles = filteredFiles.slice((filesPage - 1) * filesPerPage, filesPage * filesPerPage);
     const docPages = Math.max(1, Math.ceil(docTotal / 15));
-
-    const fmt = (v) => v != null ? `${Number(v).toLocaleString()}` : '—';
 
     return (
         <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">

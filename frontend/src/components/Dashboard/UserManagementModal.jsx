@@ -37,7 +37,7 @@ const UserManagementModal = ({ isOpen, onClose, initialTab = 'create' }) => {
             } else {
                 setMessage({ type: 'error', text: data.detail || 'Failed to create user' });
             }
-        } catch (error) {
+        } catch {
             setMessage({ type: 'error', text: 'Network error occurred' });
         }
     };
@@ -71,7 +71,7 @@ const UserManagementModal = ({ isOpen, onClose, initialTab = 'create' }) => {
             } else {
                 setMessage({ type: 'error', text: data.detail || 'Failed to update password' });
             }
-        } catch (error) {
+        } catch {
             setMessage({ type: 'error', text: 'Network error occurred' });
         }
     };
