@@ -17,9 +17,9 @@ const UserMenu = ({ user }) => {
         <div className="relative">
             <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center gap-2 text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 text-blue-200 hover:bg-white/10 hover:text-white px-3 py-2 rounded-lg transition-colors"
             >
-                <span className="bg-blue-100 text-blue-600 p-1.5 rounded-full">
+                <span className="bg-blue-800 text-white p-1.5 rounded-full">
                     <User size={20} />
                 </span>
                 <span className="font-medium text-sm">{user?.username || 'Admin'}</span>

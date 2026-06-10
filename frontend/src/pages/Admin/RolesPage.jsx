@@ -230,7 +230,7 @@ const RolesPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="flex min-h-screen bg-slate-50/50">
             <Sidebar isOpen={isSidebarOpen} user={currentUser} />
             <div className={`flex-1 transition-[margin] duration-500 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
                 <Header title="Role Management" onToggleSidebar={() => setIsSidebarOpen(p => !p)} extraAction={<UserMenu user={currentUser} />} />

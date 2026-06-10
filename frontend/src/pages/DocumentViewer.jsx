@@ -124,13 +124,13 @@ const DocumentViewer = () => {
     };
 
     if (loading) return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
             <Loader2 size={28} className="animate-spin text-blue-500" />
         </div>
     );
 
     if (error) return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex flex-col items-center justify-center gap-4">
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4">
             <AlertCircle size={36} className="text-red-400" />
             <p className="text-slate-600">{error}</p>
             <button onClick={() => navigate(-1)} className="text-blue-600 hover:underline text-sm">Go back</button>
