@@ -22,8 +22,8 @@ const Header = ({ title, onToggleSidebar, extraAction, showMenuButton = true }) 
             </div>
 
             {/* Center Section: Title */}
-            <div className="flex justify-center">
-                <h1 className="text-2xl font-bold text-white">{title}</h1>
+            <div className="flex justify-center min-w-0 px-4">
+                <h1 className="text-2xl font-bold text-white truncate">{title}</h1>
             </div>
 
             {/* Right Section: Actions */}
