@@ -406,7 +406,7 @@ const FileProcessed = () => {
     const docPages = Math.max(1, Math.ceil(docTotal / 15));
 
     return (
-        <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
+        <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 font-sans text-slate-900">
             <Sidebar isOpen={isSidebarOpen} user={user} />
             <div className={`flex-1 transition-[margin] duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
                 <Header

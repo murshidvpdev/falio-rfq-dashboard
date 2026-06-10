@@ -6,7 +6,7 @@ import { ShieldOff, ArrowLeft, Home } from 'lucide-react';
 const Unauthorized = () => {
     const navigate = useNavigate();
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-8">
             <motion.div
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
